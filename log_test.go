@@ -60,7 +60,7 @@ func init() {
 	logConf := &LogConfiguration{
 		Level:   "debug",
 		File:    true,
-		Console:true,
+		Console: true,
 		Service: "log_benchmark_test",
 		FileConfig: &LogFileConfig{
 			Name:  "test",
@@ -76,7 +76,7 @@ func init() {
 }
 
 func BenchmarkDebug(b *testing.B) {
-	for i:=0;i<b.N;i++ {
+	for i := 0; i < b.N; i++ {
 		Debug("这是测试log %s，%d", "2233333", 1233333)
 	}
 }

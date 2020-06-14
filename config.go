@@ -53,7 +53,7 @@ func (l *LogConfiguration) Validate() []error {
 	if l.Level == "" {
 		errs = append(errs, fmt.Errorf("Must specify log output level"))
 	}
-	if  !l.Console && !l.File {
+	if !l.Console && !l.File {
 		errs = append(errs, fmt.Errorf("Must specify a log output method, console or file"))
 	}
 	if l.File && l.FileConfig == nil {
@@ -64,7 +64,6 @@ func (l *LogConfiguration) Validate() []error {
 	}
 	return errs
 }
-
 
 func (f *LogFileConfig) validate() error {
 	if f == nil {

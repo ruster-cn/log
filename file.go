@@ -44,8 +44,8 @@ func NewXFileLog() XLogInterface {
 	}
 }
 
-func (p *XFileLog)NewLogFromConfiguration(c *LogConfiguration)(err error){
-	if !c.File{
+func (p *XFileLog) NewLogFromConfiguration(c *LogConfiguration) (err error) {
+	if !c.File {
 		return fmt.Errorf("log configuration not allow print file log")
 	}
 	p.service = c.Service
@@ -64,7 +64,6 @@ func (p *XFileLog)NewLogFromConfiguration(c *LogConfiguration)(err error){
 	body := func() {
 		go p.Spliter()
 	}
-
 
 	if c.FileConfig.Split {
 		p.split.Do(body)
@@ -272,23 +271,27 @@ func (p *XFileLog) ReOpen() error {
 }
 
 //打印warn日志，当日志级别大于Warn时，不会输出任何日志。
-func (p *XFileLog) Warn(format string, a ...interface{}) error {
+func (p *XFileLog) Warn(format string, a ...interface{}) {
 
 	if p.level > WarnLevel {
-		return nil
+		return
 	}
 
-	return p.warnx(XFileLogDefaultLogId, format, a...)
+	if err := p.warnx(XFileLogDefaultLogId, format, a...); err != nil {
+		fmt.Println(err.Error())
+	}
 }
 
 //打印warn日志，当日志级别大于Warn时，不会输出任何日志。
-func (p *XFileLog) Warnx(logId, format string, a ...interface{}) error {
+func (p *XFileLog) Warnx(logId, format string, a ...interface{}) {
 
 	if p.level > WarnLevel {
-		return nil
+		return
 	}
 
-	return p.warnx(logId, format, a...)
+	if err := p.warnx(logId, format, a...); err != nil {
+		fmt.Println(err.Error())
+	}
 }
 
 //打印warn日志，当日志级别大于Warn时，不会输出任何日志。
@@ -302,23 +305,27 @@ func (p *XFileLog) warnx(logId, format string, a ...interface{}) error {
 }
 
 //打印fatal日志，当日志级别大于Fatal时，不会输出任何日志。
-func (p *XFileLog) Fatal(format string, a ...interface{}) error {
+func (p *XFileLog) Fatal(format string, a ...interface{}) {
 
 	if p.level > FatalLevel {
-		return nil
+		return
 	}
 
-	return p.fatalx(XFileLogDefaultLogId, format, a...)
+	if err := p.fatalx(XFileLogDefaultLogId, format, a...); err != nil {
+		fmt.Println(err.Error())
+	}
 }
 
 //打印fatal日志，当日志级别大于Fatal时，不会输出任何日志。
-func (p *XFileLog) Fatalx(logId, format string, a ...interface{}) error {
+func (p *XFileLog) Fatalx(logId, format string, a ...interface{}) {
 
 	if p.level > FatalLevel {
-		return nil
+		return
 	}
 
-	return p.fatalx(logId, format, a...)
+	if err := p.fatalx(logId, format, a...); err != nil {
+		fmt.Println(err.Error())
+	}
 }
 
 func (p *XFileLog) fatalx(logId, format string, a ...interface{}) error {
@@ -331,32 +338,38 @@ func (p *XFileLog) fatalx(logId, format string, a ...interface{}) error {
 }
 
 //打印notice日志，当日志级别大于Notice时，不会输出任何日志。
-func (p *XFileLog) Notice(format string, a ...interface{}) error {
+func (p *XFileLog) Notice(format string, a ...interface{}) {
 
-	return p.Noticex(XFileLogDefaultLogId, format, a...)
+	p.Noticex(XFileLogDefaultLogId, format, a...)
 }
 
 //打印notice日志，当日志级别大于Notice时，不会输出任何日志。
-func (p *XFileLog) Noticex(logId, format string, a ...interface{}) error {
+func (p *XFileLog) Noticex(logId, format string, a ...interface{}) {
 
 	if p.level > NoticeLevel {
-		return nil
+		return
 	}
 
 	logText := Format(format, a...)
-	return p.write(NoticeLevel, &logText, logId)
+	if err := p.write(NoticeLevel, &logText, logId); err != nil {
+		fmt.Println((err.Error()))
+	}
 }
 
 //打印trace日志，当日志级别大于Trace时，不会输出任何日志。
-func (p *XFileLog) Trace(format string, a ...interface{}) error {
+func (p *XFileLog) Trace(format string, a ...interface{}) {
 
-	return p.tracex(XFileLogDefaultLogId, format, a...)
+	if err := p.tracex(XFileLogDefaultLogId, format, a...); err != nil {
+		fmt.Println(err.Error())
+	}
 }
 
 //打印trace日志，当日志级别大于Trace时，不会输出任何日志。
-func (p *XFileLog) Tracex(logId, format string, a ...interface{}) error {
+func (p *XFileLog) Tracex(logId, format string, a ...interface{}) {
 
-	return p.tracex(logId, format, a...)
+	if err := p.tracex(logId, format, a...); err != nil {
+		fmt.Println(err.Error())
+	}
 }
 
 //打印trace日志，当日志级别大于Trace时，不会输出任何日志。
@@ -374,9 +387,10 @@ func (p *XFileLog) tracex(logId, format string, a ...interface{}) error {
 }
 
 //打印debug日志，当日志级别大于Debug时，不会输出任何日志。
-func (p *XFileLog) Debug(format string, a ...interface{}) error {
-
-	return p.debugx(XFileLogDefaultLogId, format, a...)
+func (p *XFileLog) Debug(format string, a ...interface{}) {
+	if err := p.debugx(XFileLogDefaultLogId, format, a...); err != nil {
+		fmt.Println(err.Error())
+	}
 }
 
 //打印warn日志，当日志级别大于Warn时，不会输出任何日志。
@@ -394,9 +408,10 @@ func (p *XFileLog) debugx(logId, format string, a ...interface{}) error {
 }
 
 //打印debug日志，当日志级别大于Debug时，不会输出任何日志。
-func (p *XFileLog) Debugx(logId, format string, a ...interface{}) error {
-
-	return p.debugx(logId, format, a...)
+func (p *XFileLog) Debugx(logId, format string, a ...interface{}) {
+	if err := p.debugx(logId, format, a...); err != nil {
+		fmt.Println(err.Error())
+	}
 }
 
 //关闭日志库。注意：如果没有调用Close()关闭日志库的话，将会造成文件句柄泄露

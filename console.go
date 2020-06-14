@@ -43,7 +43,9 @@ var colors = []Brush{
 }
 
 func init() {
-	RegisterLogger("console", NewXConsoleLog())
+	if err := RegisterLogger("console", NewXConsoleLog()); err != nil {
+		panic(err)
+	}
 }
 
 func NewXConsoleLog() XLogInterface {
@@ -52,8 +54,7 @@ func NewXConsoleLog() XLogInterface {
 	}
 }
 
-
-func (p *XConsoleLog) NewLogFromConfiguration(c *LogConfiguration)(err error){
+func (p *XConsoleLog) NewLogFromConfiguration(c *LogConfiguration) (err error) {
 	p.service = c.Service
 
 	p.level = LevelFromStr(c.Level)
@@ -67,16 +68,16 @@ func (p *XConsoleLog) Init(config map[string]string) (err error) {
 
 	level, ok := config["level"]
 	if !ok {
-		err = errors.New(fmt.Sprintf("init XConsoleLog failed, not found level"))
+		err = errors.New("init XConsoleLog failed, not found level")
 		return
 	}
 
-	service, _ := config["service"]
+	service := config["service"]
 	if len(service) > 0 {
 		p.service = service
 	}
 
-	skip, _ := config["skip"]
+	skip := config["skip"]
 	if len(skip) > 0 {
 		skipNum, err := strconv.Atoi(skip)
 		if err == nil {
@@ -105,14 +106,18 @@ func (p *XConsoleLog) ReOpen() error {
 	return nil
 }
 
-func (p *XConsoleLog) Warn(format string, a ...interface{}) error {
+func (p *XConsoleLog) Warn(format string, a ...interface{}) {
 
-	return p.warnx(XConsoleLogDefaultLogId, format, a...)
+	if err := p.warnx(XConsoleLogDefaultLogId, format, a...); err != nil {
+		fmt.Println(err.Error())
+	}
 }
 
-func (p *XConsoleLog) Warnx(logId, format string, a ...interface{}) error {
+func (p *XConsoleLog) Warnx(logId, format string, a ...interface{}) {
 
-	return p.warnx(logId, format, a...)
+	if err := p.warnx(logId, format, a...); err != nil {
+		fmt.Println(err.Error())
+	}
 }
 
 //打印warn日志，当日志级别大于Warn时，不会输出任何日志。
@@ -131,14 +136,18 @@ func (p *XConsoleLog) warnx(logId, format string, a ...interface{}) error {
 	return p.write(WarnLevel, &logText, logId)
 }
 
-func (p *XConsoleLog) Fatal(format string, a ...interface{}) error {
+func (p *XConsoleLog) Fatal(format string, a ...interface{}) {
 
-	return p.fatalx(XConsoleLogDefaultLogId, format, a...)
+	if err := p.fatalx(XConsoleLogDefaultLogId, format, a...); err != nil {
+		fmt.Println(err.Error())
+	}
 }
 
-func (p *XConsoleLog) Fatalx(logId, format string, a ...interface{}) error {
+func (p *XConsoleLog) Fatalx(logId, format string, a ...interface{}) {
 
-	return p.fatalx(logId, format, a...)
+	if err := p.fatalx(logId, format, a...); err != nil {
+		fmt.Println(err.Error())
+	}
 }
 
 //打印fatal日志，当日志级别大于Fatal时，不会输出任何日志。
@@ -157,29 +166,34 @@ func (p *XConsoleLog) fatalx(logId, format string, a ...interface{}) error {
 	return p.write(FatalLevel, &logText, logId)
 }
 
-func (p *XConsoleLog) Notice(format string, a ...interface{}) error {
-
-	return p.Noticex(XConsoleLogDefaultLogId, format, a...)
+func (p *XConsoleLog) Notice(format string, a ...interface{}) {
+	p.Noticex(XConsoleLogDefaultLogId, format, a...)
 }
 
 //打印notice日志，当日志级别大于Notice时，不会输出任何日志。
-func (p *XConsoleLog) Noticex(logId, format string, a ...interface{}) error {
+func (p *XConsoleLog) Noticex(logId, format string, a ...interface{}) {
 
 	if p.level > NoticeLevel {
-		return nil
+		return
 	}
 
 	logText := Format(format, a...)
-	return p.write(NoticeLevel, &logText, logId)
+	if err := p.write(NoticeLevel, &logText, logId); err != nil {
+		fmt.Println(err.Error())
+	}
 }
 
-func (p *XConsoleLog) Trace(format string, a ...interface{}) error {
+func (p *XConsoleLog) Trace(format string, a ...interface{}) {
 
-	return p.tracex(XConsoleLogDefaultLogId, format, a...)
+	if err := p.tracex(XConsoleLogDefaultLogId, format, a...); err != nil {
+		fmt.Println(err.Error())
+	}
 }
 
-func (p *XConsoleLog) Tracex(logId, format string, a ...interface{}) error {
-	return p.tracex(logId, format, a...)
+func (p *XConsoleLog) Tracex(logId, format string, a ...interface{}) {
+	if err := p.tracex(logId, format, a...); err != nil {
+		fmt.Println(err.Error())
+	}
 }
 
 //打印trace日志，当日志级别大于Trace时，不会输出任何日志。
@@ -198,13 +212,17 @@ func (p *XConsoleLog) tracex(logId, format string, a ...interface{}) error {
 	return p.write(TraceLevel, &logText, logId)
 }
 
-func (p *XConsoleLog) Debug(format string, a ...interface{}) error {
+func (p *XConsoleLog) Debug(format string, a ...interface{}) {
 
-	return p.debugx(XConsoleLogDefaultLogId, format, a...)
+	if err := p.debugx(XConsoleLogDefaultLogId, format, a...); err != nil {
+		fmt.Println(err.Error())
+	}
 }
 
-func (p *XConsoleLog) Debugx(logId, format string, a ...interface{}) error {
-	return p.debugx(logId, format, a...)
+func (p *XConsoleLog) Debugx(logId, format string, a ...interface{}) {
+	if err := p.debugx(logId, format, a...); err != nil {
+		fmt.Println(err.Error())
+	}
 }
 
 //打印debug日志，当日志级别大于Debug时，不会输出任何日志。
@@ -243,6 +261,8 @@ func (p *XConsoleLog) write(level int, msg *string, logId string) error {
 		file = os.Stderr
 	}
 
-	file.Write([]byte(logText))
+	if _, err := file.Write([]byte(logText)); err != nil {
+		fmt.Println(err.Error())
+	}
 	return nil
 }

@@ -93,7 +93,7 @@ func initLogger(name string, config map[string]string, source ...string) (err er
 	return
 }
 
-func initLoggerFromConfiguration(name string,c *LogConfiguration,source ...string)(err error) {
+func initLoggerFromConfiguration(name string, c *LogConfiguration, source ...string) (err error) {
 	instance, ok := g_LoggerMgr[name]
 	if !ok {
 		err = errors.New(fmt.Sprintf("not found logger[%s]", name))
@@ -117,7 +117,7 @@ func initLoggerFromConfiguration(name string,c *LogConfiguration,source ...strin
 	return
 }
 
-func InitLoggerFromConfiguration(name string,c *LogConfiguration)(err error){
+func InitLoggerFromConfiguration(name string, c *LogConfiguration) (err error) {
 	lock.Lock()
 	defer lock.Unlock()
 
@@ -266,7 +266,7 @@ func SetLevel(name, level string) (err error) {
 	return
 }
 
-func Warn(format string, a ...interface{}) (err error) {
+func Warn(format string, a ...interface{}) {
 
 	lock.RLock()
 	defer lock.RUnlock()
@@ -281,7 +281,7 @@ func Warn(format string, a ...interface{}) (err error) {
 	return
 }
 
-func Fatal(format string, a ...interface{}) (err error) {
+func Fatal(format string, a ...interface{}) {
 
 	lock.RLock()
 	defer lock.RUnlock()
@@ -296,7 +296,7 @@ func Fatal(format string, a ...interface{}) (err error) {
 	return
 }
 
-func Notice(format string, a ...interface{}) (err error) {
+func Notice(format string, a ...interface{}) {
 
 	lock.RLock()
 	defer lock.RUnlock()
@@ -311,7 +311,7 @@ func Notice(format string, a ...interface{}) (err error) {
 	return
 }
 
-func Trace(format string, a ...interface{}) (err error) {
+func Trace(format string, a ...interface{}) {
 
 	lock.RLock()
 	defer lock.RUnlock()
@@ -326,7 +326,7 @@ func Trace(format string, a ...interface{}) (err error) {
 	return
 }
 
-func Debug(format string, a ...interface{}) (err error) {
+func Debug(format string, a ...interface{}) {
 
 	lock.RLock()
 	defer lock.RUnlock()
@@ -341,7 +341,7 @@ func Debug(format string, a ...interface{}) (err error) {
 	return
 }
 
-func Warnx(logId, format string, a ...interface{}) (err error) {
+func Warnx(logId, format string, a ...interface{}) {
 
 	lock.RLock()
 	defer lock.RUnlock()
@@ -356,7 +356,7 @@ func Warnx(logId, format string, a ...interface{}) (err error) {
 	return
 }
 
-func Fatalx(logId, format string, a ...interface{}) (err error) {
+func Fatalx(logId, format string, a ...interface{}) {
 
 	lock.RLock()
 	defer lock.RUnlock()
@@ -371,7 +371,7 @@ func Fatalx(logId, format string, a ...interface{}) (err error) {
 	return
 }
 
-func Noticex(logId, format string, a ...interface{}) (err error) {
+func Noticex(logId, format string, a ...interface{}) {
 
 	lock.RLock()
 	defer lock.RUnlock()
@@ -386,7 +386,7 @@ func Noticex(logId, format string, a ...interface{}) (err error) {
 	return
 }
 
-func Tracex(logId, format string, a ...interface{}) (err error) {
+func Tracex(logId, format string, a ...interface{}) {
 
 	lock.RLock()
 	defer lock.RUnlock()
@@ -401,7 +401,7 @@ func Tracex(logId, format string, a ...interface{}) (err error) {
 	return
 }
 
-func Debugx(logId, format string, a ...interface{}) (err error) {
+func Debugx(logId, format string, a ...interface{}) {
 
 	lock.RLock()
 	defer lock.RUnlock()
